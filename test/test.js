@@ -22,15 +22,13 @@ farmhand.on('progress',function(state){
 farmhand.on('complete',function(result){
     console.log('farmhand complete:',result);
 });
-
-farmhand.run(function(err,result){
-    if (err){
-        console.log('farmhand error:',err);
-    }
-    console.log('farmhand result: ',result);
+farmhand.on('error',function(err){
+    console.log('farmhand error:',err);
 });
 
-setInterval(function(){
+farmhand.work();
+
+var mi = setInterval(function(){
     console.log('main interval');
 },1000);
 
@@ -38,3 +36,8 @@ setTimeout(function(){
     console.log('sending cancel request');
     farmhand.cancel();
 },5000);
+
+setTimeout(function(){
+    console.log('stopping main interval');
+    clearInterval(mi);
+},7000);
