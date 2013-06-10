@@ -3,14 +3,15 @@ var FarmHand = require('../lib/farmhand.js');
 var ping = function(){
     var i = 0;
     var self = this;
-    var interval = setInterval(function(){
-        i += 1;
+    console.log('scope var:',self.scopevar);
+    var v = setInterval(function(){
+        i++;
         if (self.cancel){
-            console.log('cancelling worker');
-            clearInterval(interval);
+            clearInterval(v);
+            self.complete({result:'all done'});
+        }else{
+            self.progress({percent:i,time:Date.now().toString()});
         }
-        console.log('scope var:',self.scopevar);
-        self.progress({percent:i,time:Date.now().toString()});
     },1000);
 };
 
@@ -34,5 +35,6 @@ setInterval(function(){
 },1000);
 
 setTimeout(function(){
+    console.log('sending cancel request');
     farmhand.cancel();
-},10000);
+},5000);
