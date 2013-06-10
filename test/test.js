@@ -16,6 +16,7 @@ var ping = function(){
 };
 
 var farmhand = new FarmHand(ping,null,{scopevar: 'testing scope'});
+
 farmhand.on('progress',function(state){
     console.log('farmhand progress:',state);
 });
@@ -26,7 +27,13 @@ farmhand.on('error',function(err){
     console.log('farmhand error:',err);
 });
 
-farmhand.work();
+//farmhand.work();
+// or optionally pass a callback
+// instead of listening to events
+farmhand.work(function(err,result){
+    if (err) console.log('error:',err);
+    console.log('result',result);
+});
 
 var mi = setInterval(function(){
     console.log('main interval');
