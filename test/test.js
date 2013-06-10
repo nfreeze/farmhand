@@ -8,7 +8,7 @@ var ping = function(){
         i++;
         if (self.cancel){
             clearInterval(v);
-            self.complete({result:'all done'});
+            self.complete({outcome:'all done'});
         }else{
             self.progress({percent:i,time:Date.now().toString()});
         }
