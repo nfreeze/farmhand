@@ -1,7 +1,7 @@
 FarmHand
 =========
 
-Experimental abstration for node child_process that uses cryo to serialize objects and functions for consumption by the child process.
+Experimental abstration for node child_process that uses cryo to serialize a function for consumption by the child process
 
 Version
 -

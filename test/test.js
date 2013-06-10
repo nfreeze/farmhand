@@ -16,7 +16,10 @@ var ping = function(){
 
 var farmhand = new FarmHand(ping,null,{scopevar: 'testing scope'});
 farmhand.on('progress',function(state){
-  console.log('farmhand progress:',state);
+    console.log('farmhand progress:',state);
+});
+farmhand.on('complete',function(result){
+    console.log('farmhand complete:',result);
 });
 
 farmhand.run(function(err,result){

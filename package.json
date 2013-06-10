@@ -1,11 +1,24 @@
 {
-  "name": "farmhand",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "start": "node test/test.js"
-  },
-  "dependencies": {
-    "cryo": "*"
-  }
+    "name": "farmhand",
+    "version": "0.0.1",
+    "description": "Experimental abstration for node child_process that uses cryo to serialize a function for consumption by the child process",
+    "keywords": [
+        "child",
+        "background",
+        "process",
+        "worker"
+    ],
+    "author": "Nathan Freeze <nfreeze@gmail.com>",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:nfreeze/farmhand.git"
+    },
+    "main": "./lib/farmhand.js",
+    "license": "MIT",
+    "engines": {
+        "node": ">= 0.8.x"
+    },
+    "dependencies": {
+        "cryo": "*"
+    }
 }
