@@ -1,6 +1,6 @@
 {
     "name": "farmhand",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Experimental abstration for node child_process that uses cryo to serialize a function for consumption by the child process",
     "keywords": [
         "child",
