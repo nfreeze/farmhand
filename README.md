@@ -1,7 +1,7 @@
 FarmHand
 =========
 
-An abstration over child_process that makes it easy to run a function in the background, get its progress and result, and cancel if necessary.
+An abstration over child_process that makes it easy to run a function in the background, get its progress, result, and cancel if necessary.
 
 Installation:
 
@@ -11,43 +11,52 @@ Example usage:
 
     var FarmHand = require('farmhand');
 
-    var busywork = function(){
-        var i = 0;
+    function harvestCrop(max){
         var self = this;
-        self.require('util');
-        console.log('scope var:',self.scopevar);
+
+        console.log('arg test:',max == 5);
+        console.log('scope test:',self.vegetables.length == 4);
+        console.log('require test:',self.util.isArray([]));
+
+        var i = 0;
         var v = setInterval(function(){
             i++;
-            if (self.cancel){
+            if (self.cancel || i > max){
                 clearInterval(v);
                 self.complete({outcome:'all done'});
             }else{
                 self.progress({percent:i,time:Date.now()});
             }
         },1000);
-    };
+    }
 
     var farmhand = new FarmHand(busywork);
 
 You can pass arguments and scope variables to the farmhand
 
-    var farmhand = new FarmHand(busywork, [1,2,3], {scopevar: 'bacon'});
+    var farmhand = new FarmHand(harvestCrop, 5, {vegetables:['tomatoes','peas','lettuce','corn']});
+    var farmhand = new FarmHand(harvestCrop, 5);
+    farmhand.scope = {vegetables:['tomatoes','peas','lettuce','corn']};  //available as this.vegetables in the function
+
+Set requires to have modules added to the context
+
+    farmhand.requires = ['util','os','path'];  //available as this.util, this.os and this.path in the function
 
 Listen for progress, errors or completion
 
     farmhand.on('progress',function(state){
-        console.log('farmhand progress:',state);
+        console.log('progress:',state);
     });
     farmhand.on('complete',function(result){
-        console.log('farmhand complete:',result);
+        console.log('complete:',result);
     });
     farmhand.on('error',function(err){
-        console.log('farmhand error:',err);
+        console.log('error:',err);
     });
 
     farmhand.work();
 
-or optionally pass a callback instead of listening to events
+Optionally pass a callback instead of listening to events
 
     farmhand.work(function(err,result){
         if (err) console.log('error:',err);
@@ -55,7 +64,6 @@ or optionally pass a callback instead of listening to events
     });
 
 [Cryo](https://github.com/hunterloftis/cryo) is used to serialize everything sent between the parent and child processes, including the actual function.
-Serializing functions is generally frowned upon so consider this experimental.
 
 Version
 -
