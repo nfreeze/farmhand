@@ -29,7 +29,7 @@ Example usage:
 
     var farmhand = new FarmHand(busywork);
 
-You can pass arguments and scope variable to the farmhand
+You can pass arguments and scope variables to the farmhand
 
     var farmhand = new FarmHand(busywork, [1,2,3], {scopevar: 'bacon'});
 
