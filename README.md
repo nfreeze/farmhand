@@ -22,7 +22,7 @@ Example usage:
                 clearInterval(v);
                 self.complete({outcome:'all done'});
             }else{
-                self.progress({percent:i,time:Date.now().toString()});
+                self.progress({percent:i,time:Date.now()});
             }
         },1000);
     };
