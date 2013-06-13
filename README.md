@@ -68,7 +68,7 @@ Optionally pass a callback instead of listening to events
 Version
 -
 
-0.0.3
+0.0.4
 
 License
 -
