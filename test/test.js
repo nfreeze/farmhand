@@ -1,25 +1,32 @@
 var FarmHand = require('../lib/farmhand.js');
 
-function harvestCrop(max){
-    var self = this;
+function fibber(max){
+    var self = this,
+        seed = 1;
 
     console.log('arg test:',max == 5);
     console.log('scope test:',self.vegetables.length == 4);
     console.log('require test:',self.util.isArray([]));
 
-    var i = 0;
-    var v = setInterval(function(){
-        i++;
-        if (self.cancel || i > max){
-            clearInterval(v);
-            self.complete({outcome:'all done'});
-        }else{
-            self.progress({percent:i,time:Date.now()});
-        }
-    },1000);
+    function fib(n){
+        return  n<2?n:fib(n-1)+fib(n-2);
+    }
+    function getFib(){
+        setImmediate(function(){
+             if (self.cancel || seed > max){
+                 self.complete({'done':self.cancel ? 'cancelled':'max reached',
+                                'max':max});
+             }else{
+                 self.progress({'fibinocci:':fib(seed),'seed:':seed});
+                 seed++;
+                 getFib();
+             }
+        });
+    }
+    getFib();
 }
 
-var farmhand = new FarmHand(harvestCrop,5);
+var farmhand = new FarmHand(fibber,42);
 farmhand.scope = {vegetables:['tomatoes','peas','lettuce','corn']};
 farmhand.requires = ['util','os','path'];
 
@@ -53,4 +60,4 @@ setTimeout(function(){
 setTimeout(function(){
     console.log('stopping main interval');
     clearInterval(mainProcess);
-},7000);
+},10000);

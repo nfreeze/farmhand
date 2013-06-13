@@ -1,7 +1,7 @@
 {
     "name": "farmhand",
-    "version": "0.0.3",
-    "description": "An experimental abstration over child_process that makes it easy to run a function in the background, get its progress and result and cancel if necessary",
+    "version": "0.0.4",
+    "description": "An abstration over child_process that makes it easy to run a function in the background, get its progress, result and cancel if necessary",
     "keywords": [
         "child",
         "background",

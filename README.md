@@ -11,34 +11,34 @@ Example usage:
 
     var FarmHand = require('farmhand');
 
-    function harvestCrop(max){
-        var self = this;
-
-        console.log('arg test:',max == 5);
-        console.log('scope test:',self.vegetables.length == 4);
-        console.log('require test:',self.util.isArray([]));
-
-        var i = 0;
-        var v = setInterval(function(){
-            i++;
-            if (self.cancel || i > max){
-                clearInterval(v);
-                self.complete({outcome:'all done'});
-            }else{
-                self.progress({percent:i,time:Date.now()});
-            }
-        },1000);
+    function fibonacci(max){
+        var self = this,
+            seed = 1;
+        function fib(n){
+            return  n<2?n:fib(n-1)+fib(n-2);
+        }
+        function getFib(){
+            setImmediate(function(){
+                 if (self.cancel || seed > max){
+                     self.complete({'done':self.cancel,'max':max});
+                 }else{
+                     self.progress({'fibinocci:':fib(seed),'seed:':seed});
+                     seed++;
+                     getFib();
+                 }
+            });
+        }
+        getFib();
     }
 
-    var farmhand = new FarmHand(busywork);
+    var farmhand = new FarmHand(fibonacci,40);
 
-You can pass arguments and scope variables to the farmhand
+ The function must be self contained as it will be serialized and passed to the child worker.
+ If you need external data in the function, you can either pass it as arguments to the function or in a scope.
 
-    var farmhand = new FarmHand(harvestCrop, 5, {vegetables:['tomatoes','peas','lettuce','corn']});
-    var farmhand = new FarmHand(harvestCrop, 5);
     farmhand.scope = {vegetables:['tomatoes','peas','lettuce','corn']};  //available as this.vegetables in the function
 
-Set requires to have modules added to the context
+Set requires to have modules added to the context automatically
 
     farmhand.requires = ['util','os','path'];  //available as this.util, this.os and this.path in the function
 
