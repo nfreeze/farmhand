@@ -18,9 +18,9 @@ Example usage:
     function fibber(max){
         var self = this;
 
-        console.log('arg test:',max == 42);
-        console.log('require test:',util.isArray([]));
-        console.log('scope test:',self.seed == 1);
+        assert.equal(max, 42);
+        assert(util.isArray([]));
+        assert.equal(self.seed, 1);
 
         function getFib(){
             setImmediate(function(){
@@ -43,9 +43,11 @@ Create a farmhand instance by passing the function to run in the child process a
 
 Pass extras that the function will need:
 
-    farmhand.scope = {seed:1}; //available as this.seed
-    farmhand.global = {fibonacci:fibonacci}; //globally available
-    farmhand.requires = {util:'util'}; //equal to var util = require('util')
+    farmhand.scope = {seed:1}; //available as this.seed in fibber
+    farmhand.global = {fibonacci:fibonacci}; //globally available in fibber
+    farmhand.requires = {utl:'util'}; //equal to var utl = require('util')
+    farmhand.requires = ['util','assert']; //equal to var util = require('util')
+    //farmhand.requires = 'util'; //or as a string for just one
 
 Listen to the progress, error and complete events
 
@@ -63,7 +65,7 @@ Start the process
 
     farmhand.work();
 
-Optionally pass a callback instead of listening to events
+Optionally pass a callback instead
 
     farmhand.work(function(err,result){
         if (err) console.log('error:',err);
@@ -72,26 +74,17 @@ Optionally pass a callback instead of listening to events
 
 Cancel the farmhand if needed
 
-    var mainProcess = setInterval(function(){
-        console.log('main interval');
-    },1000);
-
-    setTimeout(function(){
-        console.log('sending cancel request');
-        farmhand.cancel();
-    },5000);
-
-    setTimeout(function(){
-        console.log('stopping main interval');
-        clearInterval(mainProcess);
-    },10000);
+        setTimeout(function(){
+            console.log('sending cancel request');
+            farmhand.cancel();
+        },5000);
 
 [Cryo](https://github.com/hunterloftis/cryo) is used to serialize everything sent between the parent and child processes, including the actual function.
 
 Version
 -
 
-0.0.5
+0.0.6
 
 License
 -
