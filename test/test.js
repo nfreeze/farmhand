@@ -7,9 +7,9 @@ function fibonacci(n){
 function fibber(max){
     var self = this;
 
-    console.log('arg test:',max == 42);
-    console.log('require test:',util.isArray([]));
-    console.log('scope test:',self.seed == 1);
+    assert.equal(max, 42);
+    assert(util.isArray([]));
+    assert.equal(self.seed, 1);
 
     function getFib(){
         setImmediate(function(){
@@ -27,9 +27,11 @@ function fibber(max){
 }
 
 var farmhand = new FarmHand(fibber,42);
-farmhand.scope = {seed:1}; //available as this.seed
-farmhand.global = {fibonacci:fibonacci}; //globally available
-farmhand.requires = {util:'util'}; //equal to var util = require('util')
+farmhand.scope = {seed:1}; //available as this.seed in fibber
+farmhand.global = {fibonacci:fibonacci}; //globally available in fibber
+farmhand.requires = {utl:'util'}; //equal to var utl = require('util')
+farmhand.requires = ['util','assert']; //as an array to have the same name
+//farmhand.requires = 'util'; //or as a string for just one
 
 farmhand.on('progress',function(state){
     console.log('farmhand progress:',state);
@@ -41,9 +43,8 @@ farmhand.on('error',function(err){
     console.log('farmhand error:',err);
 });
 
-farmhand.work();
-// or optionally pass a callback
-// instead of listening to events
+//farmhand.work();
+// or pass a callback
 farmhand.work(function(err,result){
     if (err) console.log('error:',err);
     console.log('result',result);
