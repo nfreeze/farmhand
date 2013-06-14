@@ -1,24 +1,24 @@
 var FarmHand = require('../lib/farmhand.js');
 
+function fibonacci(n){
+    return  n<2?n:fibonacci(n-1)+fibonacci(n-2);
+}
+
 function fibber(max){
-    var self = this,
-        seed = 1;
+    var self = this;
 
-    console.log('arg test:',max == 5);
-    console.log('scope test:',self.vegetables.length == 4);
-    console.log('require test:',self.util.isArray([]));
+    console.log('arg test:',max == 42);
+    console.log('require test:',util.isArray([]));
+    console.log('scope test:',self.seed == 1);
 
-    function fib(n){
-        return  n<2?n:fib(n-1)+fib(n-2);
-    }
     function getFib(){
         setImmediate(function(){
-             if (self.cancel || seed > max){
+             if (self.cancel || self.seed > max){
                  self.complete({'done':self.cancel ? 'cancelled':'max reached',
                                 'max':max});
              }else{
-                 self.progress({'fibinocci:':fib(seed),'seed:':seed});
-                 seed++;
+                 self.progress({'fibinocci:':fibonacci(self.seed),'seed:':self.seed});
+                 self.seed++;
                  getFib();
              }
         });
@@ -27,8 +27,9 @@ function fibber(max){
 }
 
 var farmhand = new FarmHand(fibber,42);
-farmhand.scope = {vegetables:['tomatoes','peas','lettuce','corn']};
-farmhand.requires = ['util','os','path'];
+farmhand.scope = {seed:1}; //available as this.seed
+farmhand.global = {fibonacci:fibonacci}; //globally available
+farmhand.requires = {util:'util'}; //equal to var util = require('util')
 
 farmhand.on('progress',function(state){
     console.log('farmhand progress:',state);
