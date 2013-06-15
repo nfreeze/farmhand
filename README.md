@@ -80,7 +80,7 @@ Start the process
 
     farmhand.work();
 
-Optionally pass a callback instead
+Optionally pass a callback that fires when the process is complete or on an error
 
     farmhand.work(function(err,result){
         if (err) console.log('error:',err);
