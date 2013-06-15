@@ -54,7 +54,7 @@ You can also use the following convenience method to add required modules.
     farmhand.requires = ['util','os']; //equal to var util = require('util'),os = require('os');
     farmhand.requires = 'util'; //or as a string for just one required module
 
-Listen to the progress, error and complete events
+Listen to the progress, complete, timeout and error events
 
     farmhand.on('progress',function(state){  //triggered by calling this.progress
         console.log('farmhand progress:',state);
@@ -64,9 +64,17 @@ Listen to the progress, error and complete events
         console.log('farmhand complete:',result);
     });
 
+    farmhand.on('timeout',function(t){
+        console.log('farmhand timeout:',t);
+    });
+
     farmhand.on('error',function(err){
         console.log('farmhand error:',err);
     });
+
+Set a timeout to kill the process if it runs longer than expected
+
+    farmhand.timeout = 5000;
 
 Start the process
 

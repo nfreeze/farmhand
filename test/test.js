@@ -43,9 +43,14 @@ farmhand.on('progress',function(state){
 farmhand.on('complete',function(result){
     console.log('farmhand complete:',result);
 });
+farmhand.on('timeout',function(t){
+    console.log('farmhand timeout:',t);
+});
 farmhand.on('error',function(err){
     console.log('farmhand error:',err);
 });
+
+farmhand.timeout = 3000;
 
 //farmhand.work();
 // or pass a callback
