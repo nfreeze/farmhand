@@ -18,6 +18,7 @@ Example usage:
     function fibber(max){
         var self = this;
 
+        var assert = require('assert');
         assert.equal(max, 42);
         assert(util.isArray([]));
         assert.equal(self.seed, 1);
@@ -41,22 +42,28 @@ Create a farmhand instance by passing the function to run in the child process a
 
     var farmhand = new FarmHand(fibber,42);
 
-Pass extras that the function will need:
+Pass extra functions and objects that the farmhand will need:
 
     farmhand.scope = {seed:1}; //available as this.seed in fibber
     farmhand.global = {fibonacci:fibonacci}; //globally available in fibber
-    farmhand.requires = {utl:'util'}; //equal to var utl = require('util')
-    farmhand.requires = ['util','assert']; //equal to var util = require('util')
-    //farmhand.requires = 'util'; //or as a string for just one
+
+The global 'require' method will work fine in your farmhand function.
+You can also use the following convenience method to add required modules.
+
+    farmhand.requires = {utl:'util',os:'os'}; //equal to var utl = require('util'),os = require('os');
+    farmhand.requires = ['util','os']; //equal to var util = require('util'),os = require('os');
+    farmhand.requires = 'util'; //or as a string for just one required module
 
 Listen to the progress, error and complete events
 
-    farmhand.on('progress',function(state){
+    farmhand.on('progress',function(state){  //triggered by calling this.progress
         console.log('farmhand progress:',state);
     });
-    farmhand.on('complete',function(result){
+
+    farmhand.on('complete',function(result){ //triggered by calling this.complete
         console.log('farmhand complete:',result);
     });
+
     farmhand.on('error',function(err){
         console.log('farmhand error:',err);
     });
@@ -76,7 +83,7 @@ Cancel the farmhand if needed
 
         setTimeout(function(){
             console.log('sending cancel request');
-            farmhand.cancel();
+            farmhand.cancel();  //sets this.cancel to true in your function
         },5000);
 
 [Cryo](https://github.com/hunterloftis/cryo) is used to serialize everything sent between the parent and child processes, including the actual function.
@@ -84,7 +91,7 @@ Cancel the farmhand if needed
 Version
 -
 
-0.0.6
+0.0.7
 
 License
 -

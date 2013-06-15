@@ -7,17 +7,21 @@ function fibonacci(n){
 function fibber(max){
     var self = this;
 
+    var assert = require('assert');
     assert.equal(max, 42);
     assert(util.isArray([]));
     assert.equal(self.seed, 1);
 
+    var net = require('net');
+
     function getFib(){
         setImmediate(function(){
              if (self.cancel || self.seed > max){
-                 self.complete({'done':self.cancel ? 'cancelled':'max reached',
-                                'max':max});
+                 self.complete({done:self.cancel ? 'cancelled':'max reached',
+                                max:max});
              }else{
-                 self.progress({'fibinocci:':fibonacci(self.seed),'seed:':self.seed});
+                 self.progress({fibinocci:fibonacci(self.seed),
+                                seed:self.seed});
                  self.seed++;
                  getFib();
              }
@@ -29,8 +33,8 @@ function fibber(max){
 var farmhand = new FarmHand(fibber,42);
 farmhand.scope = {seed:1}; //available as this.seed in fibber
 farmhand.global = {fibonacci:fibonacci}; //globally available in fibber
-farmhand.requires = {utl:'util'}; //equal to var utl = require('util')
-farmhand.requires = ['util','assert']; //as an array to have the same name
+farmhand.requires = {utl:'util',os:'os'}; //equal to var utl = require('util')
+farmhand.requires = ['util','os']; //as an array to have the same name
 //farmhand.requires = 'util'; //or as a string for just one
 
 farmhand.on('progress',function(state){
@@ -47,7 +51,7 @@ farmhand.on('error',function(err){
 // or pass a callback
 farmhand.work(function(err,result){
     if (err) console.log('error:',err);
-    console.log('result',result);
+    console.log('callback result',result);
 });
 
 var mainProcess = setInterval(function(){
